@@ -1,3 +1,4 @@
+// Middleware to monitor incoming requests
 const monitorMiddleware = (req, res, next) => {
     console.log(`[MONITOR] ${req.method} request to ${req.url}`);
     next();

@@ -1,3 +1,4 @@
+// Import required modules
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
@@ -8,6 +9,8 @@ const morgan = require('morgan');
 const NodeCache = require('node-cache');
 const fs = require('fs');
 const path = require('path');
+
+// Import middleware and routes
 const { errorHandler, notFound } = require('./middleware/errorMiddleware');
 const authRoutes = require('./routes/authRoutes');
 const carpoolRoutes = require('./routes/carpoolRoutes');
@@ -26,25 +29,26 @@ const routeMatchingMiddleware = require('./middleware/routeMatchingMiddleware');
 // Load environment variables
 dotenv.config();
 
+// Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 5000;
 const cache = new NodeCache();
 
-// Security & Performance Enhancements
-app.use(helmet());
-app.use(compression());
-app.use(cors());
-app.use(morgan('dev'));
-app.use(express.json());
+// Apply security and performance middleware
+app.use(helmet()); // Security headers
+app.use(compression()); // Response compression
+app.use(cors()); // Enable CORS
+app.use(morgan('dev')); // Request logging
+app.use(express.json()); // Parse JSON bodies
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 })); // Rate limiting
-app.use(logger);
-app.use(monitor);
-app.use(privacyMiddleware);
-app.use(matchingMiddleware);
-app.use(emergencyMiddleware);
-app.use(cacheMiddleware);
-app.use(poolMiddleware);
-app.use(routeMatchingMiddleware);
+app.use(logger); // Custom logging
+app.use(monitor); // Request monitoring
+app.use(privacyMiddleware); // User data protection
+app.use(matchingMiddleware); // Ride matching
+app.use(emergencyMiddleware); // Emergency protocols
+app.use(cacheMiddleware); // Response caching
+app.use(poolMiddleware); // Carpool validation
+app.use(routeMatchingMiddleware); // Route optimization
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {
@@ -53,13 +57,13 @@ mongoose.connect(process.env.MONGO_URI, {
 }).then(() => console.log('MongoDB Connected'))
   .catch(err => console.error('MongoDB Connection Error:', err));
 
-// Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/carpool', carpoolRoutes);
+// Set up routes
+app.use('/api/auth', authRoutes); // Authentication routes
+app.use('/api/carpool', carpoolRoutes); // Carpool routes
 
-// Error Handling
-app.use(notFound);
-app.use(errorHandler);
+// Error handling middleware
+app.use(notFound); // 404 handler
+app.use(errorHandler); // General error handler
 
 // Start the server
 app.listen(PORT, () => {
