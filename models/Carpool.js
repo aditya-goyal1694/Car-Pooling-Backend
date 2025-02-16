@@ -7,6 +7,7 @@ const carpoolSchema = new mongoose.Schema({
     pickupLocation: { type: String, required: true }, // Starting point
     destination: { type: String, required: true }, // Destination
     time: { type: Date, required: true }, // Scheduled time
+    participants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] // Users who joined the carpool
 });
 
 module.exports = mongoose.model('Carpool', carpoolSchema);
