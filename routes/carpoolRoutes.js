@@ -5,8 +5,8 @@ const authMiddleware = require('../middleware/authMiddleware');
 const router = express.Router();
 
 // Carpool routes
-router.post('/', authMiddleware, createCarpool); // Create a carpool (requires authentication)
-router.get('/', getCarpools); // Get all available carpools
-router.post('/:id/join', authMiddleware, joinCarpool); // ✅ Join a specific carpool
+router.post('/', authMiddleware, createCarpool);
+router.get('/', getCarpools);
+router.post('/:id/join', authMiddleware, joinCarpool);
 
 module.exports = router;

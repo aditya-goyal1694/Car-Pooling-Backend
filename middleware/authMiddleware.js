@@ -3,7 +3,6 @@ const User = require('../models/user');
 
 // Middleware to authenticate users using JWT
 const authMiddleware = async (req, res, next) => {
-    // Extract token from Authorization header
     let token = req.headers.authorization && req.headers.authorization.startsWith('Bearer')
         ? req.headers.authorization.split(' ')[1]
         : null;
